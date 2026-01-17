@@ -8,6 +8,7 @@ interface TimerDisplayProps {
     onStart: () => void;
     onPause: () => void;
     onReset: () => void;
+    onAddTime: (seconds: number) => void;
     formatTime: (seconds: number) => string;
 }
 
@@ -18,6 +19,7 @@ export default function TimerDisplay({
     onStart,
     onPause,
     onReset,
+    onAddTime,
     formatTime
 }: TimerDisplayProps) {
 
@@ -25,8 +27,16 @@ export default function TimerDisplay({
 
     return (
         <div className={styles.container}>
-            <div className={`${styles.timer} ${isFinished ? styles.finished : ''}`}>
-                {timeString}
+            <div className={styles.timerWrapper}>
+                {!isActive && !isFinished && (
+                    <button onClick={() => onAddTime(-60)} className={styles.adjustBtn} aria-label="Decrease time">-</button>
+                )}
+                <div className={`${styles.timer} ${isFinished ? styles.finished : ''}`}>
+                    {timeString}
+                </div>
+                {!isActive && !isFinished && (
+                    <button onClick={() => onAddTime(60)} className={styles.adjustBtn} aria-label="Increase time">+</button>
+                )}
             </div>
 
             <div className={styles.controls}>
@@ -36,7 +46,7 @@ export default function TimerDisplay({
                 {isActive && (
                     <button onClick={onPause} className={styles.button}>Pause</button>
                 )}
-                {(isActive || isFinished || timeLeft !== 25 * 60) && ( // Basic check for reset visibility
+                {(isActive || isFinished || timeLeft !== 25 * 60) && (
                     <button onClick={onReset} className={`${styles.button} ${styles.reset}`}>Reset</button>
                 )}
             </div>

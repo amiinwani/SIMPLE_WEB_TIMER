@@ -6,6 +6,12 @@
     margin: 3rem 0;
 }
 
+.timerWrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .timer {
     font-size: 12rem;
     font-weight: 700;
@@ -21,6 +27,29 @@
     color: var(--accent);
     text-shadow: 0 0 30px rgba(187, 134, 252, 0.4);
     animation: flash 1s infinite alternate;
+}
+
+.adjustBtn {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--foreground);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.2s;
+}
+
+.adjustBtn:hover {
+    opacity: 1;
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.1);
 }
 
 @keyframes flash {

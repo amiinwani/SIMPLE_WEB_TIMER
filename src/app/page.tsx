@@ -23,7 +23,7 @@ export default function Home() {
     start,
     pause,
     reset,
-    setDuration,
+    addTime,
     formatTime
   } = useTimer();
 
@@ -54,7 +54,7 @@ export default function Home() {
     if (isActive && notifyEnabled && timeLeft > 0) {
       const frequencySeconds = notifyFrequency * 60;
       // Trigger if timeLeft is a multiple of frequency (and not the start time)
-      // Check if (duration - timeLeft) % frequency == 0? 
+      // Check if (duration - timeLeft) % frequency == 0?
       // Actually simpler: if timeLeft % frequency == 0.
       if (timeLeft % frequencySeconds === 0 && timeLeft !== 25 * 60) {
         const bodyText = notifyTemplate.replace('{{task}}', task?.text || 'Task');
@@ -63,25 +63,37 @@ export default function Home() {
     }
   }, [isActive, timeLeft, notifyEnabled, notifyFrequency, notifyTemplate, task]);
 
-  // Dynamic Title Logic
+  // Dynamic Title Logic - Fixed to avoid re-render loops
+  const timerDataRef = useRef({ timeLeft, task });
+
+  useEffect(() => {
+    timerDataRef.current = { timeLeft, task };
+  }, [timeLeft, task]);
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
     const baseTitle = "Simple Web Timer";
 
     if (isActive) {
       let showTime = true;
-      interval = setInterval(() => {
-        const timeStr = formatTime(timeLeft);
-        const taskStr = task?.text || "Focus";
+      // Update immediately
+      const updateTitle = () => {
+        const currentLeft = timerDataRef.current.timeLeft;
+        const currentTask = timerDataRef.current.task;
+        const timeStr = formatTime(currentLeft);
+        const taskStr = currentTask?.text || "Focus";
         document.title = showTime ? `⏳ ${timeStr}` : `🎯 ${taskStr}`;
         showTime = !showTime;
-      }, 2000);
+      };
+
+      updateTitle(); // Initial call
+      interval = setInterval(updateTitle, 2000); // Toggle every 2 seconds
     } else {
       document.title = baseTitle;
     }
 
     return () => clearInterval(interval);
-  }, [isActive, timeLeft, task, formatTime]);
+  }, [isActive, formatTime]);
 
 
   return (
@@ -105,6 +117,7 @@ export default function Home() {
           onStart={start}
           onPause={pause}
           onReset={() => reset()}
+          onAddTime={addTime}
           formatTime={formatTime}
         />
       </div>

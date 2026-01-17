@@ -60,6 +60,10 @@ export const useTimer = (initialDurationSeconds: number = 25 * 60) => {
         return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     };
 
+    const addTime = useCallback((seconds: number) => {
+        setTimeLeft(prev => Math.max(0, prev + seconds));
+    }, []);
+
     return {
         timeLeft,
         isActive,
@@ -68,6 +72,7 @@ export const useTimer = (initialDurationSeconds: number = 25 * 60) => {
         pause,
         reset,
         setDuration,
+        addTime,
         formatTime
     };
 };
