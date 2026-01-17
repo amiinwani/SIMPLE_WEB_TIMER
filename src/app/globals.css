@@ -1,0 +1,37 @@
+:root {
+  --background: #121212;
+  --foreground: #ededed;
+  --primary: #ffffff;
+  --accent: #bb86fc;
+  --surface: #1e1e1e;
+  --error: #cf6679;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+}

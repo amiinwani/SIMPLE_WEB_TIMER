@@ -1,0 +1,74 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 3rem 0;
+}
+
+.timer {
+    font-size: 12rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--foreground);
+    text-shadow: 0 0 20px rgba(187, 134, 252, 0.1);
+    transition: color 0.3s, text-shadow 0.3s;
+    user-select: none;
+}
+
+.finished {
+    color: var(--accent);
+    text-shadow: 0 0 30px rgba(187, 134, 252, 0.4);
+    animation: flash 1s infinite alternate;
+}
+
+@keyframes flash {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.5;
+    }
+}
+
+.controls {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.button {
+    background: transparent;
+    border: 1px solid var(--foreground);
+    color: var(--foreground);
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.button:hover {
+    background: var(--foreground);
+    color: var(--background);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+.reset {
+    border-color: var(--error);
+    color: var(--error);
+}
+
+.reset:hover {
+    background: var(--error);
+    color: var(--background);
+}
