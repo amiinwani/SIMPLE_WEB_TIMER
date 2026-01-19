@@ -6,10 +6,13 @@ import TaskInput from '@/components/TaskInput';
 import TimerDisplay from '@/components/TimerDisplay';
 import NotificationSettings from '@/components/NotificationSettings';
 import { useTimer } from '@/hooks/useTimer';
+import Logo from '@/components/Logo';
+import { getRandomLogo } from '@/utils/logo';
 import styles from './page.module.css';
 
 export default function Home() {
   const [task, setTask] = useState<Task | null>(null);
+  const [logo, setLogo] = useState('⏳');
 
   // Notification Settings State
   const [notifyEnabled, setNotifyEnabled] = useState(false);
@@ -34,6 +37,7 @@ export default function Home() {
     // simple beep sound data URI
     alarmAudio.current = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
     alarmAudio.current.volume = 0.5;
+    setLogo(getRandomLogo());
   }, []);
 
   // Handle Alarm
@@ -64,11 +68,11 @@ export default function Home() {
   }, [isActive, timeLeft, notifyEnabled, notifyFrequency, notifyTemplate, task]);
 
   // Dynamic Title Logic - Fixed to avoid re-render loops
-  const timerDataRef = useRef({ timeLeft, task });
+  const timerDataRef = useRef({ timeLeft, task, logo });
 
   useEffect(() => {
-    timerDataRef.current = { timeLeft, task };
-  }, [timeLeft, task]);
+    timerDataRef.current = { timeLeft, task, logo };
+  }, [timeLeft, task, logo]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -80,24 +84,30 @@ export default function Home() {
       const updateTitle = () => {
         const currentLeft = timerDataRef.current.timeLeft;
         const currentTask = timerDataRef.current.task;
+        const currentLogo = timerDataRef.current.logo;
         const timeStr = formatTime(currentLeft);
         const taskStr = currentTask?.text || "Focus";
-        document.title = showTime ? `⏳ ${timeStr}` : `🎯 ${taskStr}`;
+        document.title = showTime ? `${currentLogo} ${timeStr}` : `🎯 ${taskStr}`;
         showTime = !showTime;
       };
 
       updateTitle(); // Initial call
       interval = setInterval(updateTitle, 2000); // Toggle every 2 seconds
     } else {
-      document.title = baseTitle;
+      // Also show logo in idle title
+      document.title = `${timerDataRef.current.logo} ${baseTitle}`;
     }
 
     return () => clearInterval(interval);
-  }, [isActive, formatTime]);
+  }, [isActive, formatTime, logo]); // Added logo dependency
 
 
   return (
     <main className={styles.main}>
+      <header className={styles.header} style={{ position: 'absolute', top: '1rem', left: '1rem', display: 'flex', alignItems: 'center' }}>
+        <Logo emoji={logo} />
+      </header>
+
       <NotificationSettings
         frequency={notifyFrequency}
         setFrequency={setNotifyFrequency}
@@ -116,7 +126,7 @@ export default function Home() {
           isFinished={isFinished}
           onStart={start}
           onPause={pause}
-          onReset={() => reset()}
+          onReset={(s) => reset(s)}
           onAddTime={addTime}
           formatTime={formatTime}
         />

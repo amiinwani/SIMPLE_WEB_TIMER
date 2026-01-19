@@ -101,3 +101,27 @@
     background: var(--error);
     color: var(--background);
 }
+
+.timerInput {
+    font-size: 12rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--foreground);
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+    width: 600px;
+    /* Approx width to fit MM:SS */
+    font-family: inherit;
+    text-shadow: 0 0 20px rgba(187, 134, 252, 0.1);
+}
+
+.editable {
+    cursor: pointer;
+}
+
+.editable:hover {
+    text-shadow: 0 0 30px rgba(187, 134, 252, 0.3);
+}
